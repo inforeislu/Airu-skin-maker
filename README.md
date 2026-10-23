@@ -51,7 +51,7 @@ Abre `http://localhost:4173`. O service worker funciona em `localhost` e em aloj
 
    Substitui `TEU-UTILIZADOR` pelo teu nome de utilizador GitHub. Não partilhes nem coloques tokens de acesso em ficheiros ou mensagens.
 
-5. No repositório GitHub, abre **Settings → Pages** e define **Build and deployment → Source → GitHub Actions**. O workflow deste repositório publica a pasta na raiz automaticamente.
+5. O workflow tenta ativar o GitHub Pages e selecionar GitHub Actions automaticamente. Se a organização ou as permissões da conta impedirem essa ativação, abre **Settings → Pages** e define **Build and deployment → Source → GitHub Actions**.
 6. Em **Actions**, confirma que a execução “Publish PWA” terminou com sucesso. O endereço será:
 
    ```text
