@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b0d12">
+    <meta name="description" content="Crie, pré-visualize e exporte temas Airu no navegador.">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="icon" href="./icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Airu Skin Maker</title>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Airu Skin Maker, início">
+        <span class="brand-mark" aria-hidden="true">A</span>
+        <span><strong>AIRU</strong><small>SKIN MAKER</small></span>
+      </a>
+      <div class="top-actions">
+        <span id="save-status" class="save-status" role="status">Guardado neste dispositivo</span>
+        <button id="install-button" class="button button-quiet" type="button" hidden>Instalar app</button>
+        <button id="new-button" class="button button-primary" type="button">＋ Novo tema</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="library panel" aria-label="Biblioteca de temas">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">BIBLIOTECA LOCAL</p>
+            <h1>Os meus temas</h1>
+          </div>
+          <span id="theme-count" class="count-badge">0</span>
+        </div>
+        <label class="search-wrap">
+          <span class="visually-hidden">Pesquisar temas</span>
+          <span aria-hidden="true">⌕</span>
+          <input id="search-input" type="search" placeholder="Pesquisar temas">
+        </label>
+        <ul id="theme-list" class="theme-list" aria-label="Temas guardados"></ul>
+        <div class="library-footer">
+          <button id="import-button" class="button button-quiet full-width" type="button">Importar ficheiro JSON</button>
+          <input id="import-input" type="file" accept=".json,.airuskin,application/json" hidden>
+          <p>Os temas ficam guardados localmente no navegador.</p>
+        </div>
+      </aside>
+
+      <section class="preview-column" aria-label="Pré-visualização">
+        <div class="preview-heading">
+          <div>
+            <p class="eyebrow">PRÉ-VISUALIZAÇÃO EM TEMPO REAL</p>
+            <h2 id="preview-title">Novo Tema Hi-Fi</h2>
+          </div>
+          <button id="test-link-button" class="button button-quiet" type="button">Abrir no Airu ↗</button>
+        </div>
+        <div id="receiver" class="receiver" aria-label="Pré-visualização do tema">
+          <div class="receiver-top">
+            <div class="receiver-brand">AIRU <span>STEREO RECEIVER</span></div>
+            <div class="power-indicator"><i></i> POWER</div>
+          </div>
+          <div class="tuner">
+            <div class="tuner-label">FM STEREO · ANALOGUE TUNER</div>
+            <div class="station-name">AIRU <span>FM</span></div>
+            <div class="frequency"><span>FM</span> 97.4 <small>MHz</small></div>
+            <div class="frequency-scale"><span>88</span><span>92</span><span>96</span><span>100</span><span>104</span><span>108</span><i></i></div>
+          </div>
+          <div class="meter-row" aria-label="Medidores estéreo animados">
+            <div class="meter"><span>LEFT CHANNEL</span><div class="meter-face"><i></i><b>VU</b></div><div class="meter-scale">−20　−10　0　+3</div></div>
+            <div class="meter"><span>RIGHT CHANNEL</span><div class="meter-face"><i></i><b>VU</b></div><div class="meter-scale">−20　−10　0　+3</div></div>
+          </div>
+          <div class="receiver-bottom">
+            <div class="equalizer" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="controls" aria-hidden="true"><span></span><span></span><span></span></div>
+          </div>
+          <div class="receiver-caption"><span id="preview-era">1970s · HI-FI</span><span>DESIGNED FOR AIRU</span></div>
+        </div>
+        <div class="preview-meta">
+          <span><i class="dot"></i> <span id="preview-layout">Vintage Hi-Fi</span></span>
+          <span id="preview-id">novo_tema</span>
+        </div>
+        <div class="preview-note"><span aria-hidden="true">✦</span> As alterações de cor e metadados refletem-se imediatamente na pré-visualização.</div>
+        <section class="studio-tools" aria-label="Ferramentas avançadas do estúdio">
+          <p class="eyebrow">MAIS FERRAMENTAS</p>
+          <div class="tool-launchers">
+            <button class="tool-launcher" type="button" data-open-tool="harmony">Harmonizador</button>
+            <button class="tool-launcher" type="button" data-open-tool="photo">Paleta por foto</button>
+            <button class="tool-launcher" type="button" data-open-tool="audit">Auditoria WCAG</button>
+            <button class="tool-launcher" type="button" data-open-tool="snapshots">Snapshots</button>
+            <button class="tool-launcher" type="button" data-open-tool="compare">Comparação A/B</button>
+            <button class="tool-launcher" type="button" data-open-tool="web">Ponte Web</button>
+            <button class="tool-launcher" type="button" data-open-tool="showcase">Imagem Showcase</button>
+          </div>
+        </section>
+      </section>
+
+      <section class="editor panel" aria-label="Editor do tema">
+        <div class="editor-heading">
+          <div>
+            <p class="eyebrow">ESTÚDIO DE CRIAÇÃO</p>
+            <h2>Editar tema</h2>
+          </div>
+          <button id="delete-button" class="icon-button" type="button" aria-label="Eliminar tema" title="Eliminar tema">⌫</button>
+        </div>
+        <form id="theme-form">
+          <fieldset>
+            <legend>Identidade</legend>
+            <label class="field">Nome do tema<input name="name" maxlength="80" required></label>
+            <div class="field-row">
+              <label class="field">Autor<input name="author" maxlength="80"></label>
+              <label class="field">Versão<input name="version" maxlength="20"></label>
+            </div>
+            <label class="field">Identificador<input name="id" maxlength="80" pattern="[a-zA-Z0-9_\-]+" required aria-describedby="id-hint"><small id="id-hint">Use letras, números, hífen ou underscore.</small></label>
+            <label class="field">Descrição<textarea name="descriptionText" rows="3" maxlength="300"></textarea></label>
+            <div class="field-row">
+              <label class="field">Época<input name="eraTag" maxlength="40"></label>
+              <label class="field">Categoria<input name="category" maxlength="60"></label>
+            </div>
+            <label class="field">Estilo de layout<select name="baseLayoutRaw" id="layout-select"></select></label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Paleta de cores</legend>
+            <div class="color-grid">
+              <label class="color-field"><span>Cor de destaque</span><input name="accentColorHex" type="color"><code data-hex-for="accentColorHex"></code></label>
+              <label class="color-field"><span>Fundo do chassi</span><input name="backgroundColorHex" type="color"><code data-hex-for="backgroundColorHex"></code></label>
+              <label class="color-field"><span>Superfície</span><input name="surfaceColorHex" type="color"><code data-hex-for="surfaceColorHex"></code></label>
+              <label class="color-field"><span>Cor secundária</span><input name="secondaryColorHex" type="color"><code data-hex-for="secondaryColorHex"></code></label>
+              <label class="color-field"><span>Agulha</span><input name="needleColorHex" type="color"><code data-hex-for="needleColorHex"></code></label>
+              <label class="color-field"><span>Retroiluminação</span><input name="backlightColorHex" type="color"><code data-hex-for="backlightColorHex"></code></label>
+            </div>
+            <div class="preset-row" aria-label="Paletas rápidas">
+              <button class="preset" type="button" data-preset="amber"><i class="swatches amber"></i> Âmbar Vintage</button>
+              <button class="preset" type="button" data-preset="sapphire"><i class="swatches sapphire"></i> Safira Marantz</button>
+              <button class="preset" type="button" data-preset="emerald"><i class="swatches emerald"></i> Esmeralda</button>
+            </div>
+          </fieldset>
+
+          <div class="editor-actions">
+            <button id="duplicate-button" class="button button-quiet" type="button">Duplicar</button>
+            <button id="export-button" class="button button-primary" type="button">Exportar JSON ↓</button>
+          </div>
+          <p id="message" class="message" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <dialog id="studio-dialog" class="studio-dialog" aria-labelledby="studio-dialog-title">
+      <div class="studio-dialog-header">
+        <div>
+          <p class="eyebrow">AIRU SKIN MAKER</p>
+          <h2 id="studio-dialog-title">Ferramentas do estúdio</h2>
+        </div>
+        <button id="close-studio-dialog" class="icon-button" type="button" aria-label="Fechar ferramentas">×</button>
+      </div>
+      <nav class="studio-tabs" aria-label="Ferramentas">
+        <button type="button" role="tab" aria-selected="true" data-tool-tab="harmony">Harmonizador</button>
+        <button type="button" role="tab" aria-selected="false" data-tool-tab="photo">Fotografia</button>
+        <button type="button" role="tab" aria-selected="false" data-tool-tab="audit">Auditoria</button>
+        <button type="button" role="tab" aria-selected="false" data-tool-tab="snapshots">Snapshots</button>
+        <button type="button" role="tab" aria-selected="false" data-tool-tab="compare">A/B</button>
+        <button type="button" role="tab" aria-selected="false" data-tool-tab="web">Ponte Web</button>
+        <button type="button" role="tab" aria-selected="false" data-tool-tab="showcase">Showcase</button>
+      </nav>
+      <div class="studio-tool-panel" data-tool-panel="harmony" role="tabpanel">
+        <h3>Harmonizador cromático</h3>
+        <p>Gere uma relação de cores a partir do destaque do tema e afine a temperatura, saturação e luminosidade.</p>
+        <label class="field">Regra harmónica
+          <select id="harmony-rule">
+            <option value="complementary">Complementar</option>
+            <option value="analogous">Análoga</option>
+            <option value="triadic">Triádica</option>
+            <option value="split">Split-complementar</option>
+            <option value="tetradic">Tétrada</option>
+            <option value="monochromatic">Monocromática</option>
+          </select>
+        </label>
+        <label class="range-field">Temperatura de cor <output id="warmth-output">0</output><input id="warmth-range" type="range" min="-100" max="100" value="0"></label>
+        <label class="range-field">Saturação global <output id="saturation-output">100%</output><input id="saturation-range" type="range" min="20" max="180" value="100"></label>
+        <label class="range-field">Compensação de brilho <output id="lightness-output">0%</output><input id="lightness-range" type="range" min="-30" max="30" value="0"></label>
+        <div id="harmony-swatches" class="harmony-swatches" aria-label="Paleta harmonizada"></div>
+        <div class="dialog-actions"><button id="apply-harmony" class="button button-primary" type="button">Aplicar paleta</button></div>
+      </div>
+      <div class="studio-tool-panel" data-tool-panel="photo" role="tabpanel" hidden>
+        <h3>Extrair paleta por fotografia</h3>
+        <p>Escolha uma foto de um amplificador ou rádio. A análise é feita neste dispositivo; a imagem não é enviada.</p>
+        <label class="upload-zone" for="photo-input"><span>＋</span><strong>Escolher fotografia</strong><small>PNG, JPEG ou WebP</small></label>
+        <input id="photo-input" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+        <img id="photo-preview" class="photo-preview" alt="Pré-visualização da fotografia" hidden>
+        <div id="photo-swatches" class="harmony-swatches"></div>
+        <div class="dialog-actions"><button id="apply-photo-palette" class="button button-primary" type="button" disabled>Aplicar ao tema</button></div>
+      </div>
+      <div class="studio-tool-panel" data-tool-panel="audit" role="tabpanel" hidden>
+        <h3>Auditoria de qualidade</h3>
+        <p>Avaliação local de metadados, ID e contraste sRGB/WCAG. A imagem promocional é opcional no editor web.</p>
+        <div class="audit-score"><strong id="audit-score">100%</strong><span id="audit-label">Pronto para rever</span></div>
+        <ul id="audit-results" class="audit-results"></ul>
+        <div class="dialog-actions"><button id="auto-fix-button" class="button button-primary" type="button">Auto-corrigir problemas</button></div>
+      </div>
+      <div class="studio-tool-panel" data-tool-panel="snapshots" role="tabpanel" hidden>
+        <h3>Histórico de versões</h3>
+        <p>Guarde uma versão deste tema antes de experimentar alterações. Os snapshots ficam neste navegador.</p>
+        <div class="snapshot-create"><input id="snapshot-label" maxlength="80" placeholder="Etiqueta (ex.: ponteiro âmbar)"><button id="save-snapshot" class="button button-primary" type="button">Guardar snapshot</button></div>
+        <ul id="snapshot-list" class="snapshot-list"></ul>
+      </div>
+      <div class="studio-tool-panel" data-tool-panel="compare" role="tabpanel" hidden>
+        <h3>Comparação visual A/B</h3>
+        <p>Compare as cores e o desenho do tema atual com outro tema da biblioteca local.</p>
+        <label class="field">Tema de referência<select id="compare-select"></select></label>
+        <div class="compare-grid">
+          <div><span>ATUAL</span><div id="compare-current" class="receiver compare-receiver"></div></div>
+          <div><span>REFERÊNCIA</span><div id="compare-reference" class="receiver compare-receiver"></div></div>
+        </div>
+      </div>
+      <div class="studio-tool-panel" data-tool-panel="web" role="tabpanel" hidden>
+        <h3>Ponte Web</h3>
+        <p>Gere variáveis CSS e um manifesto compatível com este tema para integrar em sites e web players.</p>
+        <label class="field">Formato<select id="web-format"><option value="css">CSS custom properties</option><option value="tailwind">Configuração Tailwind</option><option value="manifest">Manifesto Airu JSON</option></select></label>
+        <textarea id="web-code" class="code-output" rows="13" readonly aria-label="Código gerado"></textarea>
+        <div class="dialog-actions"><button id="copy-web-code" class="button button-quiet" type="button">Copiar código</button><button id="download-web-code" class="button button-primary" type="button">Descarregar</button></div>
+      </div>
+      <div class="studio-tool-panel" data-tool-panel="showcase" role="tabpanel" hidden>
+        <h3>Exportar imagem de apresentação</h3>
+        <p>Crie um cartão PNG 1200 × 750 com a paleta e a identidade do tema, diretamente no navegador.</p>
+        <div class="showcase-preview" id="showcase-preview"></div>
+        <div class="dialog-actions"><button id="download-showcase" class="button button-primary" type="button">Exportar PNG 1200 × 750</button></div>
+      </div>
+      <p id="tool-message" class="message" role="status" aria-live="polite"></p>
+    </dialog>
+
+    <footer class="footer"><span>Airu Audiophile Ecosystem</span><span>Skin Maker Web · PWA</span></footer>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
